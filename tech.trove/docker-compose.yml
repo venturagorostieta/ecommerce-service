@@ -1,0 +1,42 @@
+version: '3.4'
+
+services:
+
+  tech-trove-ecommerce:
+    build:
+      context: ./tech-trove-ecommerce
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: tech-trove-ecommerce
+        SERVICE_PORT: 9208
+    container_name: tech-trove-ecommerce
+    environment:
+      PROFILES_LABEL: native
+    restart: unless-stopped
+    ports:
+      - "9208:9208"
+    depends_on:
+      - mongodb
+      - redis
+
+  mongodb:
+    image: "mongo:latest"
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: tech-trove-db
+    volumes:
+      - mongodb-data:/data/db
+
+  redis:
+    image: "redis:latest"
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  mongodb-data:
+  redis-data:

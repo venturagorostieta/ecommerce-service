@@ -1,0 +1,65 @@
+server:
+  port: 9208
+  servlet:
+    context-path: /tech-trove-ecommerce
+  shutdown: graceful
+
+spring:
+  application:
+    name: tech-trove
+  lifecycle:
+    time-out-per-shutdown-phase: 1m
+  profiles:
+    active: ${PROFILES_LABEL:native}
+  cloud:
+    discovery:
+      enabled: false
+  security:
+    oauth2:
+      jwt:
+        issuer-uri: ${OAUTH2_ISSUER_URI:}
+        jwk-set-uri: ${AWS_COGNITO_JWKS:}
+  jackson:
+    default-property-inclusion: non_null
+  data:
+    mongodb:
+      readPreference: ${MONGODB_READ_PREFERENCE:PRIMARY}
+      uri: ${MONGODB_URI_ECOMMERCE:}
+      auto-index-creation: false
+  redis:
+    host: ${SPRING_REDIS_HOST:}
+    port: ${SPRING_REDIS_PORT:}
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    health:
+      show-details: always
+
+trove:
+  security:
+    cognito:
+      url: ${AWS_COGNITO_OAUTH2_TOKEN_URL:}
+      jwt-token-credentials:
+        clientId: ${AWS_COGNITO_OAUTH2_CLIENT_ID:}
+        clientSecret: ${AWS_COGNITO_OAUTH2_CLIENT_SECRET:}
+      jwk-store: ${AWS_COGNITO_JWKS:}
+    api-key:
+      client-api-key: ${ECOMMERCE_SERVICE_API_KEY:}
+
+aws:
+  region: ${AWS_REGION:us-east-1}
+
+cognito:
+  userPoolId: ${COGNITO_USER_POOL_ID:}
+  clientId: ${COGNITO_CLIENT_ID:}
+  urlBase: ${AWS_COGNITO_URL_BASE:https://cognito-idp.${AWS_REGION:us-east-1}.amazonaws.com/${COGNITO_USER_POOL_ID:}}
+securityApp:
+  enabledByOperationActionsCurrentUser: true
+
+api:
+  tech-trove-services:
+    my-other-service: ${SIMS_SECURITY_SERVICE_BASE_URL:http://localhost:9204/api/ecommerce-service/}
