@@ -39,6 +39,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductChannelDto saveProduct(ProductRequestDto productRequestDto) {
 
+        log.info("Init create product by orderId.");
         ProductDto dto = ProductMapper.INSTANCE.toProductDto(productRequestDto);
         return ProductMapper.INSTANCE.toProductChannelDto(
                 productRepository.save(ProductMapper.INSTANCE.toProductDocument(dto))
@@ -54,6 +55,7 @@ public class ProductServiceImpl implements ProductService {
     @Cacheable(value = "products", key = "#productId")
     @Override
     public ProductChannelDto findProductById(String productId) {
+        log.info("Init findProductById product by productId. {}", productId);
 
         Optional<Product> product = productRepository.findByProductId(productId);
         return ProductMapper.INSTANCE.toProductChannelDto(
@@ -71,6 +73,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductChannelDto updateProduct(ProductUpdateRequestDto productUpdateRequestDto,
                                            String productId) {
+        log.info("Init updateProduct  by productId. {}", productId);
+
         Product productModel = lookUpProductByProductId(productId);
         productModel.setCategoryId(productUpdateRequestDto.getCategoryId());
         productModel.setPrice(productUpdateRequestDto.getPrice());
@@ -85,6 +89,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @CacheEvict(value = "products", key = "#productId")
     public void removeProductByProductId(String productId) {
+        log.info("Init remove product by productId. {}", productId);
         lookUpProductByProductId(productId);
         productRepository.deleteByProductId(productId);
     }

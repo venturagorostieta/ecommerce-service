@@ -64,6 +64,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserChannelDto saveUser(UserRequestDto userRequestDto) {
 
+        log.info("Init create user by productId.");
+
         User request = UserMapper.INSTANCE.toUser(userRequestDto);
         request.setStatus(UserStatus.ACTIVE);
         request.setCreatedAt(LocalDateTime.now());
@@ -89,6 +91,8 @@ public class UserServiceImpl implements UserService {
     @Cacheable(value = "users", key = "#userId")
     @Override
     public UserChannelDto findUserById(String userId) {
+        log.info("Init find user by userId.{}", userId);
+
         Optional<User> response = userRepository.findById(userId);
         return UserMapper.INSTANCE.toUserChannelDto(
                 response.orElseThrow( () -> new ResourceNotFoundException("User not found.")));
@@ -104,6 +108,7 @@ public class UserServiceImpl implements UserService {
     @CachePut(value = "users", key = "#userId")
     @Override
     public UserChannelDto updateUser(UserUpdateRequestDto userUpdateRequestDto, String userId) {
+        log.info("Init update user by userId.{}", userId);
 
         User userModel = lookUpUser(userId);
         userModel.setEmail(userUpdateRequestDto.getEmail());
@@ -125,6 +130,8 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(value = "users", key = "#userId")
     @Override
     public void removeUserById(String userId) {
+        log.info("Init remove user by userId.{}", userId);
+
         lookUpUser(userId);
         userRepository.deleteById(userId);
     }

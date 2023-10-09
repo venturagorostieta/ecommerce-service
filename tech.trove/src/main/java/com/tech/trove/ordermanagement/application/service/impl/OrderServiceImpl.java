@@ -39,6 +39,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderChannelDto saveOrder(OrderRequestDto orderRequestDto) {
 
+        log.info("Init Create order");
         Order request = OrderMapper.INSTANCE.toOrder(orderRequestDto);
         return OrderMapper.INSTANCE.toChannelDto(saveOrder(request));
     }
@@ -51,6 +52,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderChannelDto findOrderById(String id) {
+        log.info("Init find order byId {}", id);
         Optional<Order> response = orderRepository.findById(id);
         return OrderMapper.INSTANCE.toChannelDto(
                 response.orElseThrow( () -> new ResourceNotFoundException("Product not found.")));
@@ -66,6 +68,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderChannelDto updateOrder(OrderUpdateRequestDto orderUpdateRequestDto,
                                        String orderId) {
+        log.info("Init update order by orderId {}", orderId);
+
         OrderChannelDto orderFound = findOrderById(orderId);
         Order oderModel = OrderMapper.INSTANCE.fromOrderChannelDtoToOrder(orderFound);
         oderModel.setItems(Mappers.getMapper(ItemMapper.class).toItemList(orderUpdateRequestDto.getItems()));
@@ -82,6 +86,8 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void removeOrder(String orderId) {
+        log.info("Init remove order by orderId {}", orderId);
+
         findOrderById(orderId);
         orderRepository.deleteById(orderId);
     }

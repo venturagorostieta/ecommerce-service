@@ -25,6 +25,9 @@ public class SecurityConfig {
     @Value("${trove.security.api-key.client-api-key}")
     private String apiKey;
 
+    @Value("${spring.security.oauth2.jwt.jwk-set-uri}")
+    private String jwkSetUri;
+
     private final PermissionFilter permissionFilter;
 
 
@@ -96,13 +99,10 @@ public class SecurityConfig {
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
-                                .jwkSetUri("https://cognito-idp.us-east-1.amazonaws.com/us-east-1_7SLLRdKZE/.well-known/jwks.json")
+                                .jwkSetUri(jwkSetUri)
                         )
                 );
         return http.build();
     }
-
-
-
 
 }
