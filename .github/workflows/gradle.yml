@@ -28,6 +28,11 @@ jobs:
       with:
         java-version: '8'
         distribution: 'temurin'
+    - name: Install specific version of Gradle
+      run: |
+        wget https\://services.gradle.org/distributions/gradle-8.2.1-bin.zip
+        export PATH=$PATH:$PWD/gradle-8.2.1/bin
+        
     - name: Build with Gradle
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
