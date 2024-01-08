@@ -63,3 +63,7 @@ securityApp:
 api:
   tech-trove-services:
     my-other-service: ${SIMS_SECURITY_SERVICE_BASE_URL:http://localhost:9204/api/ecommerce-service/}
+
+logging:
+  level:
+    org.springframework.security: DEBUG

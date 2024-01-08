@@ -21,7 +21,8 @@ public enum DomainType {
     /**
      * Customer domain type.
      */
-    CUSTOMER("Customer");
+    CUSTOMER("Customer"),
+    SPEI("Spei");
 
     private String title;
 
